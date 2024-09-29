@@ -84,16 +84,66 @@ The application will be implemented as a web application following the MVC princ
 
 ## 4.1 Use Cases 
 
-  
+### Use Case 1: Search for Flights
 
-Detailed use cases explaining user actions within the application, such as: 
+**Description**:  
+The user wants to search for available flights based on their selected departure airport, budget, and departure date.
 
-  
+**Precondition**:  
+The user has access to the application interface.
 
-- Viewing map data 
+**Steps**:
+1. The user opens the application.
+2. The user selects a departure airport from the dropdown list.
+3. The user sets a budget using the slider to indicate the maximum amount they are willing to spend on a flight.
+4. The user selects a departure date using the date picker.
+5. The user clicks the "Search" button.
+6. The system processes the request and displays a list of available flights based on the criteria.
 
-- Loading and processing data 
+**Postcondition**:  
+The application returns a list of flights, showing information such as price, weather at the destination, and the flight availability.
 
+---
+
+### Use Case 2: View Search Results
+
+**Description**:  
+The user reviews the search results to find the most suitable flight option.
+
+**Precondition**:  
+The user has conducted a search by selecting airport, budget, and dates.
+
+**Steps**:
+1. The system presents the user with a list of destinations that meet the search criteria.
+2. The user can see details of each flight, including:
+   - Destination (e.g., Malaga, London).
+   - Weather at the destination (e.g., 24°C and sunny for Malaga).
+   - Flight price (e.g., 123€ for Malaga).
+   - A heart icon to mark favorite destinations.
+3. A map is displayed alongside the flight results, showing the geographical location of each destination.
+4. The user can click on the destination card for more details or to proceed with booking.
+
+**Postcondition**:  
+The user can choose a flight and view detailed information or continue searching for other options.
+
+---
+
+### Use Case 3: Filter and Sort Flight Results
+
+**Description**:  
+The user wants to refine the search results by adjusting filters such as budget or dates, or sorting by criteria such as best match or price.
+
+**Precondition**:  
+The user has performed a search and is viewing the search results.
+
+**Steps**:
+1. The user adjusts the budget slider to narrow down the flight options within their price range (e.g., from $0 to $125).
+2. The user can change the departure and return dates using the date pickers.
+3. The user can select a sorting option (e.g., "Best Match") from the dropdown menu to prioritize results by relevance or price.
+4. The system updates the list of available flights according to the new criteria.
+
+**Postcondition**:  
+The search results are updated, showing only the flights that match the newly set budget, dates, or sorting order.
   
 
 ## 4.2 User Interface Prototype 
