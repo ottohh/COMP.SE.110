@@ -1,88 +1,85 @@
-# 1. Introduction 
+# Design Document <!-- omit in toc -->
 
-  
+## Table of Contents <!-- omit in toc -->
 
-**Project Name**: COMP.SE.110 "Quick Vacation on a Budget" 
+- [1. Introduction](#1-introduction)
+  - [1.1 Purpose and Scope](#11-purpose-and-scope)
+  - [1.2 Goals](#12-goals)
+- [2. Requirements Specification](#2-requirements-specification)
+  - [2.1 Functional Requirements](#21-functional-requirements)
+  - [2.2 Non-Functional Requirements](#22-non-functional-requirements)
+- [3. Architecture Design](#3-architecture-design)
+  - [3.1 General Architecture Overview](#31-general-architecture-overview)
+  - [3.2 Technologies and Tools](#32-technologies-and-tools)
+- [4. User Interface Design](#4-user-interface-design)
+  - [4.1 Use Cases](#41-use-cases)
+    - [Use Case 1: Search for Flights](#use-case-1-search-for-flights)
+    - [Use Case 2: View Search Results](#use-case-2-view-search-results)
+    - [Use Case 3: Filter and Sort Flight Results](#use-case-3-filter-and-sort-flight-results)
+  - [4.2 User Interface Prototype](#42-user-interface-prototype)
+- [5. Integration with External Services](#5-integration-with-external-services)
+  - [5.1 API Description](#51-api-description)
+  - [5.2 Data Integration and Visualization](#52-data-integration-and-visualization)
+- [6. Testing](#6-testing)
+  - [6.1 Testing Strategy](#61-testing-strategy)
+- [7. Project Management and Timeline](#7-project-management-and-timeline)
+  - [7.1 Project Management Tools](#71-project-management-tools)
+- [8. Use of AI in Project Design and Implementation](#8-use-of-ai-in-project-design-and-implementation)
 
-  
+# 1. Introduction
 
-**Project Team**: Otto Haarahiltunen, Vilppu Tupeli, Eero Hakanen, Niilo Jaakkola 
+**Project Name**: COMP.SE.110 "Quick Vacation on a Budget"
 
-  
+**Project Team**:
 
-**Summary**: A last-minute travel scanner based on price, dates, and desired weather conditions. 
+- Otto Haarahiltunen
+  - Weather API
+- Vilppu Tupeli
+  - Flight API
+- Eero Hakanen
+  - Airports API
+- Niilo Jaakkola
+  - Frontend
 
-  
+**Summary**: A last-minute travel scanner based on price, dates, and desired weather conditions.
 
-## 1.1 Purpose and Scope 
+## 1.1 Purpose and Scope
 
-  
+The purpose of the software is to suggest the cheapest direct flights to different destinations from the user's selected airport and time frame. The found flights are sorted by price and local weather. The user can then choose their preferred option and proceed to a website where they can book the flight.
 
-The purpose of the software is to suggest the cheapest direct flights to different destinations from the user's selected airport and time frame. The found flights are sorted by price and local weather. The user can then choose their preferred option and proceed to a website where they can book the flight. 
+## 1.2 Goals
 
-  
+Short-term goals include enabling the program to offer reasonable options.
 
-## 1.2 Goals 
+# 2. Requirements Specification
 
-  
+## 2.1 Functional Requirements
 
-Short-term goals include enabling the program to offer reasonable options. 
+- **Selecting search criteria**: The user must be able to select the travel budget, departure date, return date, and airport.
 
-  
+- **Data visualization**: The user should be able to view map-based visualizations of destinations, weather, and prices.
 
-# 2. Requirements Specification 
+## 2.2 Non-Functional Requirements
 
-  
+- **Performance**: The application must operate at a sufficient speed.
 
-## 2.1 Functional Requirements 
+# 3. Architecture Design
 
-  
+## 3.1 General Architecture Overview
 
-- **Selecting search criteria**: The user must be able to select the travel budget, departure date, return date, and airport. 
+The application will be implemented as a web application following the MVC principle. The Front-End is responsible for data visualization and user interface functionality, while the business logic is handled in the Back-End. A layered architecture is employed in the Back-End to clarify structure and facilitate task distribution and testing. The class diagram below illustrates the structure of the Back-End and the relationships between different layers.
 
-- **Data visualization**: The user should be able to view map-based visualizations of destinations, weather, and prices. 
+[Class Diagram](https://drive.google.com/file/d/1OiQVkGx7B5HnSlQVauICjwz9y3TbM1ZT/preview)
 
-  
+## 3.2 Technologies and Tools
 
-## 2.2 Non-Functional Requirements 
+- **Frontend**: HTML/CSS/JS
 
-  
+- **Backend**: Java
 
-- **Performance**: The application must operate at a sufficient speed. 
+# 4. User Interface Design
 
-  
-
-# 3. Architecture Design 
-
-  
-
-## 3.1 General Architecture Overview 
-
-  
-
-The application will be implemented as a web application following the MVC principle. The Front-End is responsible for data visualization and user interface functionality, while the business logic is handled in the Back-End. A layered architecture is employed in the Back-End to clarify structure and facilitate task distribution and testing. The class diagram below illustrates the structure of the Back-End and the relationships between different layers. 
-
-  
-
-[Class Diagram](https://drive.google.com/file/d/1OiQVkGx7B5HnSlQVauICjwz9y3TbM1ZT/preview) 
-
-  
-
-## 3.2 Technologies and Tools 
-
-  
-
-- **Frontend**: HTML/CSS/JS 
-
-- **Backend**: Java 
-
-  
-
-# 4. User Interface Design 
-
-  
-
-## 4.1 Use Cases 
+## 4.1 Use Cases
 
 ### Use Case 1: Search for Flights
 
@@ -93,6 +90,7 @@ The user wants to search for available flights based on their selected departure
 The user has access to the application interface.
 
 **Steps**:
+
 1. The user opens the application.
 2. The user selects a departure airport from the dropdown list.
 3. The user sets a budget using the slider to indicate the maximum amount they are willing to spend on a flight.
@@ -114,6 +112,7 @@ The user reviews the search results to find the most suitable flight option.
 The user has conducted a search by selecting airport, budget, and dates.
 
 **Steps**:
+
 1. The system presents the user with a list of destinations that meet the search criteria.
 2. The user can see details of each flight, including:
    - Destination (e.g., Malaga, London).
@@ -137,6 +136,7 @@ The user wants to refine the search results by adjusting filters such as budget 
 The user has performed a search and is viewing the search results.
 
 **Steps**:
+
 1. The user adjusts the budget slider to narrow down the flight options within their price range (e.g., from $0 to $125).
 2. The user can change the departure and return dates using the date pickers.
 3. The user can select a sorting option (e.g., "Best Match") from the dropdown menu to prioritize results by relevance or price.
@@ -144,70 +144,40 @@ The user has performed a search and is viewing the search results.
 
 **Postcondition**:  
 The search results are updated, showing only the flights that match the newly set budget, dates, or sorting order.
-  
 
-## 4.2 User Interface Prototype 
+## 4.2 User Interface Prototype
 
-  
+[The user interface prototype.](https://www.figma.com/proto/3Z0nJM7AmZo1X4sag637eH/Prototype?node-id=32-54&node-type=canvas&t=vkOqLgQTHZ5XPx7T-0&scaling=min-zoom&content-scaling=fixed&starting-point-node-id=52%3A248)
 
-[The user interface prototype.](https://www.figma.com/proto/3Z0nJM7AmZo1X4sag637eH/Prototype?node-id=32-54&node-type=canvas&t=vkOqLgQTHZ5XPx7T-0&scaling=min-zoom&content-scaling=fixed&starting-point-node-id=52%3A248) 
+# 5. Integration with External Services
 
-  
+## 5.1 API Description
 
-# 5. Integration with External Services 
+**External APIs used**:
 
-  
+- **Weather API** - OpenWeatherMap
 
-## 5.1 API Description 
+- **Flight Offers Search API** - Find Cheap Flights, 400+ Airlines | Amadeus for Developers
 
-   
+- [Airport api](https://www.flightsfrom.com/)
 
-**External APIs used**: 
+## 5.2 Data Integration and Visualization
 
-  
+The application aims to integrate data from the aforementioned API calls and display it according to the prior user interface plan.
 
-- **Weather API** - OpenWeatherMap 
+# 6. Testing
 
-- **Flight Offers Search API** - Find Cheap Flights, 400+ Airlines | Amadeus for Developers 
+## 6.1 Testing Strategy
 
-- [Airport api](https://www.flightsfrom.com/) 
+The testing strategy for the Front-End involves manual acceptance testing at the final stage, complemented with unit tests as needed. The focus of testing is on the Back-End, where unit tests and integration tests will be implemented for each layer to ensure the functionality of interfaces between the layers.
 
-  
+# 7. Project Management and Timeline
 
-## 5.2 Data Integration and Visualization 
+## 7.1 Project Management Tools
 
-  
+The progress of the project and task distribution will be tracked using Trello. Internal group communication will be carried out via Telegram and Discord. Git and GitHub will be used for version control. Figma will be used for UI design and prototyping.
 
-The application aims to integrate data from the aforementioned API calls and display it according to the prior user interface plan. 
+# 8. Use of AI in Project Design and Implementation
 
-  
+AI was utilized in brainstorming and finding potential APIs. It was also used to create the foundation of the documentation.
 
-# 6. Testing 
-
-  
-
-## 6.1 Testing Strategy 
-
-  
-
-The testing strategy for the Front-End involves manual acceptance testing at the final stage, complemented with unit tests as needed. The focus of testing is on the Back-End, where unit tests and integration tests will be implemented for each layer to ensure the functionality of interfaces between the layers. 
-
-  
-
-# 7. Project Management and Timeline 
-
-  
-
-## 7.1 Project Management Tools 
-
-  
-
-The progress of the project and task distribution will be tracked using Trello. Internal group communication will be carried out via Telegram and Discord. Git and GitHub will be used for version control. Figma will be used for UI design and prototyping. 
-
-  
-
-# 8. Use of AI in Project Design and Implementation 
-
-  
-
-AI was utilized in brainstorming and finding potential APIs. It was also used to create the foundation of the documentation. 
