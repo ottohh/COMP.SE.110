@@ -19,6 +19,7 @@
   - [4.2 User Interface Prototype](#42-user-interface-prototype)
 - [5. Integration with External Services](#5-integration-with-external-services)
   - [5.1 API Description](#51-api-description)
+    - [5.1.3 Airport API](#513-airport-api)
   - [5.2 Data Integration and Visualization](#52-data-integration-and-visualization)
 - [6. Testing](#6-testing)
   - [6.1 Testing Strategy](#61-testing-strategy)
@@ -161,6 +162,93 @@ The search results are updated, showing only the flights that match the newly se
 
 - [Airport api](https://www.flightsfrom.com/)
 
+### 5.1.3 Airport API
+
+Airport API is used to fetch two types of data:
+
+- fetch all airports, all airports are used to select departure airport
+- fetch all flight connections from the chosen airport
+
+**All airports**
+
+Fetched from https://www.flightsfrom.com/airports. Response contains a list of airport objects.
+
+<!-- Possible improvement to this design would be to search for airports ordered by nearest airport to the user. -->
+
+Example result:
+
+```json
+{
+  "response": {
+    "airports": [
+      {
+        "city_name": "Aasiaat",
+        "country": "Greenland",
+        "country_code": "GL",
+        "IATA": "JEG",
+        "latitude": "68.7",
+        "longitude": "-52.75",
+        "no_routes": "10",
+        "name": "Aasiaat"
+      },
+      .
+      .
+      .
+    ]
+  }
+}
+```
+
+**Airport routes**
+
+All direct flight routes (_app uses only direct connections_) are fetched from https://www.flightsfrom.com/api/airports/{airport_code}.
+
+If user picks a specific departure date then flight connections should be filtered with parameter day. https://www.flightsfrom.com/api/airports/{airport_code}?&days=day{day_number} where day numbers are based on weekdays mon-su => 1-7.
+
+<!-- There is a possible edge case where an airport would have a flight to some airport but there would be no return flights. For example there is direct flight form A->B but no flight from B->A. This can be explored later. -->
+
+Example result:
+
+```json
+{
+  "response": {
+    "routes": [
+      {
+        "iata_from": "TMP",
+        "iata_to": "RIX",
+        "city_name_en": "Riga",
+        // TODO are these weekdays which contain flights needed?
+        // In this example there is flights
+        "day1": "yes",
+        "day2": "yes",
+        "day3": "yes",
+        "day4": "yes",
+        "day5": "yes",
+        "day6": "yes",
+        "day7": "upcoming",
+        // Not sure what price this indicates, maybe just don't use this ?
+        "price": "42",
+        "airport": {
+          "IATA": "RIX",
+          "latitude": "56.92208",
+          "longitude": "23.979806",
+          "city_name": "Riga",
+          "name": "Riga International Airport",
+          "display_name": "Riga (RIX), Latvia",
+          "country_code": "LV",
+          "country": "Latvia",
+        },
+        .
+        .
+        .
+      }
+    ]
+  }
+}
+```
+
+_NOTE: only relevant data shown in the example, the API returns more data_
+
 ## 5.2 Data Integration and Visualization
 
 The application aims to integrate data from the aforementioned API calls and display it according to the prior user interface plan.
@@ -175,7 +263,7 @@ The testing strategy for the Front-End involves manual acceptance testing at the
 
 ## 7.1 Project Management Tools
 
-The progress of the project and task distribution will be tracked using Trello. Internal group communication will be carried out via Telegram and Discord. Git and GitHub will be used for version control. Figma will be used for UI design and prototyping.
+The progress of the project and task distribution will be tracked using [Github Projects](https://github.com/users/ottohh/projects/1). Internal group communication will be carried out via Telegram and Discord. Git and GitHub will be used for [version control](https://github.com/ottohh/COMP.SE.110). Figma will be used for UI design and prototyping.
 
 # 8. Use of AI in Project Design and Implementation
 
