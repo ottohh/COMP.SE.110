@@ -10,6 +10,7 @@
   - [2.2 Non-Functional Requirements](#22-non-functional-requirements)
 - [3. Architecture Design](#3-architecture-design)
   - [3.1 General Architecture Overview](#31-general-architecture-overview)
+    - [3.1.1 Airport service layer class diagram](#311-airport-service-layer-class-diagram)
   - [3.2 Technologies and Tools](#32-technologies-and-tools)
 - [4. User Interface Design](#4-user-interface-design)
   - [4.1 Use Cases](#41-use-cases)
@@ -70,7 +71,94 @@ Short-term goals include enabling the program to offer reasonable options.
 
 The application will be implemented as a web application following the MVC principle. The Front-End is responsible for data visualization and user interface functionality, while the business logic is handled in the Back-End. A layered architecture is employed in the Back-End to clarify structure and facilitate task distribution and testing. The class diagram below illustrates the structure of the Back-End and the relationships between different layers.
 
+```mermaid
+classDiagram
+    class View {
+        +
+    }
+
+    class Controller {
+        -airportService: AirportService
+        -weatherService: WeatherService
+        -flightService: FlightService
+        +handleUserRequest(airportCode: String, day: Integer) : void
+        +getAirportData() : List~AirportDTO~
+        +getRouteData(airportCode: String, day: Integer) : List~AirportDTO~
+    }
+
+    class AirportService {
+        -apiClient : ApiClient
+        -parser : AirportJsonParser
+        +fetchAirports() : List~AirportDTO~
+        +fetchAirportsFromRoutes(airportCode: String, day: Integer) : List~AirportDTO~
+    }
+
+    class WeatherService {
+        -apiClient : ApiClient
+        +fetchWeatherData() : WeatherDTO
+    }
+
+    class FlightService {
+        -apiClient : ApiClient
+        +fetchFlights() : FlightDTO
+    }
+
+    Controller --> View : "renders data"
+    View --> Controller : "sends user input"
+    Controller --> WeatherService : "calls"
+    Controller --> AirportService : "calls"
+    Controller --> FlightService : "calls"
+```
+
 [Class Diagram](https://drive.google.com/file/d/1OiQVkGx7B5HnSlQVauICjwz9y3TbM1ZT/preview)
+
+### 3.1.1 Airport service layer class diagram
+
+```mermaid
+classDiagram
+    class ApiClient {
+        +getJsonResponse(url: String) : String
+    }
+
+    class AirportJsonParser {
+        +parseAirports(jsonResponse: String) : List~AirportDTO~
+        +parseRoutes(jsonResponse: String) : List~AirportDTO~
+    }
+
+    class AirportService {
+        -apiClient : ApiClient
+        -parser : AirportJsonParser
+        +fetchAirports() : List~AirportDTO~
+        +fetchAirportsFromRoutes(airportCode: String, day: Integer) : List~AirportDTO~
+    }
+
+    class AirportDTO {
+        -city_name: String
+        -country: String
+        -country_code: String
+        -IATA: String
+        -latitude: double
+        -longitude: double
+        -no_routes: int
+        -name: String
+        +getCity_name() : String
+        +setCity_name(cityName: String)
+        +getCountry() : String
+        +setCountry(country: String)
+        +getIATA() : String
+        +setIATA(IATA: String)
+        +toString() : String
+    }
+
+    class ApiException {
+        +ApiException(message: String)
+    }
+
+    ApiClient --> AirportService : "provides data"
+    AirportJsonParser --> AirportService : "parses data"
+    AirportService --> AirportDTO : "uses"
+    AirportService --> ApiException : "throws error"
+```
 
 ## 3.2 Technologies and Tools
 
