@@ -1,4 +1,4 @@
-package org.example;
+package org.example.AirportService;
 
 import java.util.List;
 

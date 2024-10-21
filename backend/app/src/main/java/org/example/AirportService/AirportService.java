@@ -1,4 +1,4 @@
-package org.example;
+package org.example.AirportService;
 
 import com.google.gson.Gson;
 import com.google.gson.JsonObject;
@@ -12,6 +12,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
+// TODO new improved design to be used ... 
 // TODO there is still some flakines with the API, sometimes it returns 403 forbidden
 public class AirportService {
 

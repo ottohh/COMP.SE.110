@@ -1,4 +1,4 @@
-package org.example;
+package org.example.AirportService;
 
 public class AirportDTO {
     private String city_name;
