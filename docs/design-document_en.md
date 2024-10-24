@@ -12,6 +12,9 @@
   - [3.1 General Architecture Overview](#31-general-architecture-overview)
     - [3.1.1 Airport service layer class diagram](#311-airport-service-layer-class-diagram)
   - [3.2 Technologies and Tools](#32-technologies-and-tools)
+  - [3.3 Backend desing](#33-backend-desing)
+    - [3.3.1 WeatherService](#331-weatherService)
+
 - [4. User Interface Design](#4-user-interface-design)
   - [4.1 Use Cases](#41-use-cases)
     - [Use Case 1: Search for Flights](#use-case-1-search-for-flights)
@@ -20,6 +23,7 @@
   - [4.2 User Interface Prototype](#42-user-interface-prototype)
 - [5. Integration with External Services](#5-integration-with-external-services)
   - [5.1 API Description](#51-api-description)
+    - [5.1.1 Weather API](#511-weather-api)
     - [5.1.3 Airport API](#513-airport-api)
   - [5.2 Data Integration and Visualization](#52-data-integration-and-visualization)
 - [6. Testing](#6-testing)
@@ -164,7 +168,27 @@ classDiagram
 
 - **Frontend**: HTML/CSS/JS
 
-- **Backend**: Java
+- **Backend**: Java with Maven, Spring Boot
+
+## 3.3 Backend desing
+  The backend is divided into three services, with a single controller that integrates them.
+
+### 3.3.1 WeatherService
+  The WeatherService is designed to manage connection to openweathermap API and query forecast's based on location coordinates.
+  It consist the respose and DTO classes whom represent the data received from API.
+  - Constructor that takes the latitude and longitude. 
+    This choice was made because api returns forecast's based on location so every location should have their own instance of the class.
+  - LoadForeCasts() tries to access the forecast api and load the forecasts for the next five days. Return value tells did the request succeed.
+    This choice comes because we don't want to throw error on GetForecastForDate() in case connection is not made. We would like to see it beforehand and just skip the forecast loading in that case. It is also possible that we would like to get forecast for multiple days on given location. It would not make sense to call the API many times for the data we already have queried.
+  - GetForecastForDate(LocalDate date) takes a date wanted to get the forecast for and returns ForecastDTO containing information about weather for that day.
+    In case there is no forecast for the day given as parameter this does return the current days forecast. SHOULD NOT BE CALLED IF LoadForeCast does not succeed.
+    Need for this function is quite obvious from previous functions.
+    
+  WEATHER_API_URL string is also exposed for testing purpose.
+
+  Internally WeatherService uses okhttp3 and gson to retrieve and deserialize data.
+
+
 
 # 4. User Interface Design
 
@@ -249,6 +273,68 @@ The search results are updated, showing only the flights that match the newly se
 - **Flight Offers Search API** - Find Cheap Flights, 400+ Airlines | Amadeus for Developers
 
 - [Airport api](https://www.flightsfrom.com/)
+
+### 5.1.1 Weather API
+
+Weather API is used to fetch forecast for the next five days based on selected the destination airport coordinates.
+
+**Fetching forecasts**
+
+Forecasts are fetched from url https://api.openweathermap.org/data/2.5/forecast?lat={latitude}&lon={longitude}&appid={api-key}&units=metric.
+Response contains a list of forecast for the next five days. Each day has a forecast for every three hours.
+
+Example result:
+
+```json
+{
+  "cod": "200",
+  "message": 0,
+  "cnt": 40,
+  "list": [
+      {
+          "dt": 1728734400,
+          "main": {
+              "temp": 10.32,
+              "feels_like": 9.89,
+              "temp_min": 10.3,
+              "temp_max": 10.32,
+              "pressure": 1019,
+              "sea_level": 1019,
+              "grnd_level": 764,
+              "humidity": 95,
+              "temp_kf": 0.02
+          },
+          "weather": [
+              {
+                  "id": 804,
+                  "main": "Clouds",
+                  "description": "overcast clouds",
+                  "icon": "04d"
+              }
+          ],
+          "clouds": {
+              "all": 95
+          },
+          "wind": {
+              "speed": 3.53,
+              "deg": 21,
+              "gust": 4.34
+          },
+          "visibility": 10000,
+          "pop": 0,
+          "sys": {
+              "pod": "d"
+          },
+          "dt_txt": "2024-10-12 12:00:00"
+      },
+      .
+      .
+      .
+  ]
+}
+  
+```
+
 
 ### 5.1.3 Airport API
 
