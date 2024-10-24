@@ -13,8 +13,7 @@
     - [3.1.1 Airport service layer class diagram](#311-airport-service-layer-class-diagram)
   - [3.2 Technologies and Tools](#32-technologies-and-tools)
   - [3.3 Backend desing](#33-backend-desing)
-    - [3.3.1 WeatherService](#331-weatherService)
-
+    - [3.3.1 WeatherService](#331-weatherservice)
 - [4. User Interface Design](#4-user-interface-design)
   - [4.1 Use Cases](#41-use-cases)
     - [Use Case 1: Search for Flights](#use-case-1-search-for-flights)
@@ -160,7 +159,7 @@ classDiagram
 
     ApiClient --> AirportService : "provides data"
     AirportJsonParser --> AirportService : "parses data"
-    AirportService --> AirportDTO : "uses"
+    AirportJsonParser --> AirportDTO : "uses"
     AirportService --> ApiException : "throws error"
 ```
 
