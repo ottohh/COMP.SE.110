@@ -440,5 +440,15 @@ The progress of the project and task distribution will be tracked using [Github 
 
 # 8. Use of AI in Project Design and Implementation
 
-AI was utilized in brainstorming and finding potential APIs. It was also used to create the foundation of the documentation.
+AI was utilized in brainstorming and finding potential APIs. It was also used to create the foundation of the documentation. 
+
+In development AI was used to generate DTO classes based on the response json from API call.
+
+# 9. Self-evaluation
+Project was planned to be implemented in four different parts that will be integrated together as show in general architecture overview. Front-end and services that handle the external api calls. At this point we have not started the integration yet. It seems that splitting the project to four parts has so far been a good choice and we have been able to stick to the plan. Splitting the project to four independent parts correspond to quality because every part is developed, tested and maintained separately.
+
+
+
+
+
 
