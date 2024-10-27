@@ -44,7 +44,7 @@ public class WeatherService
     
     private WeatherResponse WeatherResponse;
     public static String WEATHER_API_URL = "https://api.openweathermap.org/data/2.5/forecast?lat=%s&lon=%s&appid=%s&units=metric";
-    private static final String API_KEY = "";
+    private static final String API_KEY = "6569077c084bc0d7b0a1f61836267595";
     String latitude;
     String longitude;
     

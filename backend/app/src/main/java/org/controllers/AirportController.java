@@ -17,6 +17,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.RequestParam;
+
 
 @RestController
 @RequestMapping("/airports")
@@ -34,4 +36,16 @@ public class AirportController {
             return ResponseEntity.status(500).body(null);
         }
     }
+
+    @GetMapping("from")
+    public ResponseEntity<List<AirportDTO>> getRoutesFromAirport(@RequestParam String airportCode, @RequestParam Integer day) {
+        try {
+            List<AirportDTO> airports = airportService.FetchAirportsFromRoutes(airportCode, day);
+            return ResponseEntity.ok(airports);
+        } catch (Exception e) {
+            e.printStackTrace();
+            return ResponseEntity.status(500).body(null);
+        }
+    }
+    
 }
