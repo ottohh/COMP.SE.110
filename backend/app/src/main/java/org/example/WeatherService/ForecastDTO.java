@@ -8,15 +8,15 @@ import java.time.format.DateTimeFormatter;
  * @author ottop
  */
 public class ForecastDTO {
-    long dt;
-    Main main;
-    Weather[] weather;
-    Clouds clouds;
-    Wind wind;
-    int visibility;
-    double pop;
-    Rain rain;
-    String dt_txt;
+    public long dt;
+    public Main main;
+    public Weather[] weather;
+    public Clouds clouds;
+    public Wind wind;
+    public int visibility;
+    public double pop;
+    public Rain rain;
+    public String dt_txt;
     public LocalDateTime GetDateTime()
     {
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
@@ -26,43 +26,44 @@ public class ForecastDTO {
     {
         return main.feelsLike;
     }
+    
 }
 
 
 class Main {
-    double temp;
+    public double temp;
     @SerializedName("feels_like")
-    double feelsLike;
+    public double feelsLike;
     @SerializedName("temp_min")
-    double tempMin;
+    public double tempMin;
     @SerializedName("temp_max")
-    double tempMax;
-    int pressure;
+    public double tempMax;
+    public int pressure;
     @SerializedName("sea_level")
-    int seaLevel;
+    public int seaLevel;
     @SerializedName("grnd_level")
-    int groundLevel;
-    int humidity;
+    public int groundLevel;
+    public int humidity;
 }
 
 class Weather {
-    int id;
-    String main;
+    public int id;
+    public String main;
     public String description;
-    String icon;
+    public String icon;
 }
 
 class Clouds {
-    int all;
+    public int all;
 }
 
 class Wind {
-    double speed;
-    int deg;
-    double gust;
+    public double speed;
+    public int deg;
+    public double gust;
 }
 
  class Rain {
     @SerializedName("3h")
-    double rainVolume;
+    public double rainVolume;
 }
