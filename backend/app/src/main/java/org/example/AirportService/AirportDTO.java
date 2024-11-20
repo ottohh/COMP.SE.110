@@ -10,6 +10,18 @@ public class AirportDTO {
     private int no_routes;
     private String name;
 
+    public AirportDTO(String city_name, String country, String country_code, String IATA, double latitude,
+            double longitude, int no_routes, String name) {
+        this.city_name = city_name;
+        this.country = country;
+        this.country_code = country_code;
+        this.IATA = IATA;
+        this.latitude = latitude;
+        this.longitude = longitude;
+        this.no_routes = no_routes;
+        this.name = name;
+    }
+
     // Getters and Setters
     public String getCity_name() {
         return city_name;
