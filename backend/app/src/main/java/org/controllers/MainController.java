@@ -59,7 +59,7 @@ public class MainController {
             try {
                 var flights= flightService.searchFlights(originIATA, airport.getIATA(), today.format(formatter), returnDate.format(formatter), 1);
                 
-                data.flight=flights[0];
+                data.price=flights[0].getPrice().getGrandTotal();
             } catch (Exception e) {
                 e.printStackTrace();
             } 
@@ -93,7 +93,8 @@ public class MainController {
     }
     
     private class Data{
-        public FlightOfferSearch flight;
+        //public FlightOfferSearch flight;
+        public String price;
         public ForecastDTO weather;
         public AirportDTO airport;
     }
