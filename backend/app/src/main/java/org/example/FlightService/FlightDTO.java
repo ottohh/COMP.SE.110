@@ -1,59 +1,84 @@
 package org.example.FlightService;
 
 public class FlightDTO {
-    private String origin;
-    private String destination;
-    private String departureDate;
-    private String returnDate;
-    private double price;
+    private int id;
+    private int co2Emissions;
+    private Float totalPrice;
+    private String lastTicketingDate;
+    private String duration;
+    private String carrierCode;
+    private String aircraft;
 
+
+    // Default constructor
     public FlightDTO() {}
 
-    public FlightDTO(String origin, String destination, String departureDate, String returnDate, double price) {
-        this.origin = origin;
-        this.destination = destination;
-        this.departureDate = departureDate;
-        this.returnDate = returnDate;
-        this.price = price;
+    // Parameterized constructor
+    public FlightDTO(int id, float totalPrice, String lastTicketingDate, String duration, int co2Emissions, String carrierCode, String aircraft) {
+        this.id = id;
+        this.totalPrice = totalPrice;
+        this.lastTicketingDate = lastTicketingDate;
+        this.duration = duration;
+        this.co2Emissions = co2Emissions;
+        this.carrierCode = carrierCode;
+        this.aircraft = aircraft;
     }
 
-    public String getOrigin() {
-        return origin;
+    // Getters and setters
+    public int getId() {
+        return id;
     }
 
-    public void setOrigin(String origin) {
-        this.origin = origin;
+    public void setId(int id) {
+        this.id = id;
     }
 
-    public String getDestination() {
-        return destination;
+    public float getTotalPrice() {
+        return totalPrice;
     }
 
-    public void setDestination(String destination) {
-        this.destination = destination;
+    public void setTotalPrice(float totalPrice) {
+        this.totalPrice = totalPrice;
     }
 
-    public String getDepartureDate() {
-        return departureDate;
+    public String getLastTicketingDate() {
+        return lastTicketingDate;
     }
 
-    public void setDepartureDate(String departureDate) {
-        this.departureDate = departureDate;
+    public void setLastTicketingDate(String lastTicketingDate) {
+        this.lastTicketingDate = lastTicketingDate;
     }
 
-    public String getReturnDate() {
-        return returnDate;
+    public String getDuration() {
+        return duration;
     }
 
-    public void setReturnDate(String returnDate) {
-        this.returnDate = returnDate;
+    public void setDuration(String duration) {
+        this.duration = duration;
     }
 
-    public double getPrice() {
-        return price;
+    public int getCo2Emissions() {
+        return co2Emissions;
     }
 
-    public void setPrice(double price) {
-        this.price = price;
+    public void setCo2Emissions(int co2Emissions) {
+        this.co2Emissions = co2Emissions;
     }
+
+    public String getCarrierCode() {
+        return carrierCode;
+    }
+
+    public void setCarrierCode(String carrierCode) {
+        this.carrierCode = carrierCode;
+    }
+
+    public String getAircraft() {
+        return aircraft;
+    }
+
+    public void setAircraft(String aircraft) {
+        this.aircraft = aircraft;
+    }
+
 }

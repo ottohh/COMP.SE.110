@@ -59,7 +59,7 @@ public class MainController {
             try {
                 var flights= flightService.searchFlights(originIATA, airport.getIATA(), today.format(formatter), returnDate.format(formatter), 1);
                 
-                data.price=flights[0].getPrice().getGrandTotal();
+                data.price=Float.toString(flights.get(0).getTotalPrice());
             } catch (Exception e) {
                 e.printStackTrace();
             } 
