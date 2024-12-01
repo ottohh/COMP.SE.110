@@ -11,6 +11,15 @@ export type Airport = {
 
 export type FlightDTO = {
   price: string
+  flight: {
+    id: number
+    co2Emissions: number
+    totalPrice: number
+    lastTicketingDate: string
+    duration: string
+    carrierCode: string
+    aircraft: string
+  }
   weather: {
     dt: number
     main: {

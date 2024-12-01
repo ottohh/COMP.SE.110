@@ -1,5 +1,7 @@
 <script lang="ts">
   import { goto } from '$app/navigation'
+  import { getSearchHistory } from '$lib/history.js'
+  import { onMount } from 'svelte'
   import { fly } from 'svelte/transition'
 
   const { data } = $props()
@@ -12,6 +14,12 @@
   let reason = $state(reasons[Math.floor(Math.random() * reasons.length)])
 
   let visible = $state(false)
+
+  let favorites = $state<string[]>([])
+
+  onMount(async () => {
+    favorites = await getSearchHistory()
+  })
 
   $effect(() => {
     visible = true
@@ -29,7 +37,7 @@
 </script>
 
 <main class="flex h-full w-full">
-  <div class="flex flex-1 items-center justify-center">
+  <div class="flex flex-1 flex-col items-center justify-center gap-8">
     <form class="flex flex-col gap-8 rounded-md px-4 py-5 sm:p-6" onsubmit={handleFormSubmit}>
       <h1 class="text-center text-lg font-medium leading-6 text-gray-900">
         Escape from
@@ -58,6 +66,21 @@
         </button>
       </div>
     </form>
+    <!-- List of favorite links -->
+    <div class="flex flex-col gap-4">
+      <h2 class="text-lg font-semibold text-gray-800">Favorites</h2>
+      {#if favorites.length === 0}
+        <p class="text-gray-500">No favorites yet</p>
+      {:else}
+        <ul class="flex flex-col gap-2">
+          {#each favorites as favorite}
+            <li>
+              <a href={`/${favorite}`} class="text-blue-500">{favorite}</a>
+            </li>
+          {/each}
+        </ul>
+      {/if}
+    </div>
   </div>
   <div class="hidden flex-1 md:flex">
     {#if visible}

@@ -1,5 +1,7 @@
 <script lang="ts">
   import { twMerge } from 'tailwind-merge'
+  import Airlines from '../assets/airlines.json'
+  import EmissionsPNG from '../assets/emissions.png'
   import type { FlightDTO } from '../types'
   import Weather from './Weather.svelte'
 
@@ -8,7 +10,27 @@
     selected?: boolean
   }
 
-  const { airport, price, weather, onClick, selected = false }: Props = $props()
+  const props: Props = $props()
+
+  let { airport, price, weather, onClick, flight, selected = false } = $derived(props)
+
+  function parseISO8601Duration(duration: string): string {
+    const match = duration.match(/PT(\d+H)?(\d+M)?/)
+
+    if (!match) {
+      return '0 min'
+    }
+
+    const hours = match[1] ? parseInt(match[1].replace('H', '')) : 0
+    const minutes = match[2] ? parseInt(match[2].replace('M', '')) : 0
+
+    return `${hours} hr ${minutes} min`
+  }
+
+  const getOperator = (carrierCode: string) => {
+    const airline = Airlines.find((airline) => airline.iata === carrierCode)
+    return airline?.name || carrierCode
+  }
 </script>
 
 <button
@@ -19,13 +41,26 @@
   onclick={() => onClick(airport.iata)}
 >
   <div class="flex w-full items-center justify-between gap-4">
-    <span class="flex items-center gap-2 text-3xl font-bold">
-      {airport.city_name}
-      <span class="text-sm text-gray-500">
-        ({airport.iata})
+    <div class="flex-col">
+      <span class="flex items-center gap-2 text-xl font-bold">
+        {airport.city_name}
+        <span class="text-sm text-gray-500">
+          ({airport.iata})
+        </span>
       </span>
-    </span>
-    <span class="text-center text-sm font-semibold text-gray-800">8hrs 15mins</span>
+
+      <div class="flex items-center gap-4">
+        <span class="text-sm">{getOperator(flight?.carrierCode)}</span>
+
+        {#if flight?.co2Emissions > 0}
+          <div class="flex items-center gap-1">
+            <img src={EmissionsPNG} alt="CO2 Emissions" class="h-4 w-4 mix-blend-multiply" />
+            <span class="text-xs text-gray-500">{flight?.co2Emissions} kg CO2</span>
+          </div>
+        {/if}
+      </div>
+    </div>
+    <span class="text-center text-sm font-semibold text-gray-800">{parseISO8601Duration(flight?.duration)}</span>
   </div>
 
   <!-- Horizontal break -->
