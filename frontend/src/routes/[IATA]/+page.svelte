@@ -3,8 +3,8 @@
   import { onMount } from 'svelte'
   import { MapLibre, Marker } from 'svelte-maplibre'
   import Arc from '../../components/Arc.svelte'
-  import Flight from '../../components/Flight.svelte'
   import Loading from '../../components/Loading.svelte'
+  import Flights from './Flights.svelte'
 
   const { data } = $props()
 
@@ -74,9 +74,7 @@
           </svg>
         </button>
       </div>
-      {#each flights.filter((f) => f.flight) as flight}
-        <Flight selected={flight.airport.iata === selectedFlight} onClick={(d) => (selectedFlight = d)} {...flight} />
-      {/each}
+      <Flights {flights} from={data.from} bind:selectedFlight />
     </div>
     <div class="flex-[2]">
       <MapLibre

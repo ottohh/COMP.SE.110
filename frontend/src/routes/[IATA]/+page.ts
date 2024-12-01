@@ -6,7 +6,7 @@ export const load = async ({ params, parent }) => {
   const { airports } = await parent()
 
   return {
-    from: airports.find((airport) => airport.iata === originIATA),
+    from: airports.find((airport) => airport.iata === originIATA)!,
     flights: getFlightsFrom(originIATA)
   }
 }
