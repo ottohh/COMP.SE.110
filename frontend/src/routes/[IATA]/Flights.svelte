@@ -54,7 +54,7 @@
 
 {#if flights.length === 0}
   <div class="flex h-full w-full items-center justify-center">
-    <h1 class="text-3xl font-bold">No flights found</h1>
+    <h1 class="text-3xl font-bold">No flights tomorrow :(</h1>
   </div>
 {/if}
 {#each sortedFlights as flight (flight.airport.iata)}
