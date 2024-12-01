@@ -1,23 +1,25 @@
 import org.junit.Test;
-
-import com.amadeus.exceptions.ResponseException;
-import com.amadeus.resources.FlightOfferSearch;
-
 import static org.junit.Assert.*;
-
+import java.util.List;
+import org.example.FlightService.FlightDTO;
 import org.example.FlightService.FlightService;
-
+import java.time.format.DateTimeFormatter;
+import java.time.LocalDate;
 
 public class FlightServiceTest {
     @Test
     public void testSearchFlights() {
         FlightService flightService = new FlightService();
-        FlightOfferSearch[] results;
+        List<FlightDTO> results;
+        LocalDate today = LocalDate.now();
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+        LocalDate returnDate = LocalDate.now().plusDays(7);
+
         try {
-            results = flightService.searchFlights("NYC", "MAD", "2024-11-01", "2024-11-08", 1);
+            results = flightService.searchFlights("NYC", "MAD", today.format(formatter), returnDate.format(formatter), 1);
             assertNotNull(results);
-            assertTrue(results.length > 0);
-        } catch (ResponseException e) {
+            assertTrue(results.size() > 0);
+        } catch (Exception e) {
             e.printStackTrace();
         }
 
