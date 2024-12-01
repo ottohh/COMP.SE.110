@@ -14,6 +14,7 @@
   - [3.3 Backend desing](#33-backend-desing)
     - [3.3.1 WeatherService](#331-weatherservice)
     - [3.3.2 Airport service layer class diagram](#332-airport-service-layer-class-diagram)
+    - [3.3.3 FlightService](#333-flightservice)
 - [4. User Interface Design](#4-user-interface-design)
   - [4.1 Use Cases](#41-use-cases)
     - [Use Case 1: Search for Flights](#use-case-1-search-for-flights)
@@ -197,6 +198,32 @@ classDiagram
     AirportJsonParser --> AirportDTO : "uses"
     AirportService --> ApiException : "throws error"
 ```
+### 3.3.3 FlightService
+
+The FlightService is responsible for managing flight search operations using the Amadeus API. It provides methods to search for flights based on various criteria and returns the results in a structured format.
+
+  - **Constructor**:
+
+      The constructor initializes the Amadeus client using the AmadeusClient class. This setup ensures that the service is ready to make API calls to the Amadeus flight offers search endpoint.
+
+  - **searchFlights(String origin, String destination, String departureDate, String returnDate, int adults):**
+
+      This method performs a flight search based on the provided parameters: origin, destination, departure date, return date, and the number of adults.
+      It constructs the API request using the Params class and sends the request to the Amadeus API.
+      The method processes the response, extracting relevant flight details such as ID, total price, last ticketing date, duration, CO2 emissions, carrier code, and aircraft type.
+      The results are mapped to FlightDTO objects, which are then sorted by total price before being returned.
+
+  - **Error Handling:**
+
+      The method includes error handling to catch and log any ResponseException that may occur during the API call. This ensures that the application can handle API errors gracefully and continue to operate.
+
+  - **Internal Structure:**
+
+      The FlightService uses the AmadeusClient to obtain an instance of the Amadeus client.
+      It iterates through the flight offers returned by the API, processes each offer to extract flight details, and accumulates CO2 emissions for each segment of the itinerary.
+      The service sorts the flight offers by total price to provide the user with the most cost-effective options first.
+
+This design ensures that the FlightService is modular, testable, and capable of handling real-time flight search operations efficiently.
 
 # 4. User Interface Design
 
@@ -276,11 +303,11 @@ The search results are updated, showing only the flights that match the newly se
 
 **External APIs used**:
 
-- **Weather API** - OpenWeatherMap
+- Weather API - OpenWeatherMap
 
-- **Flight Offers Search API** - Find Cheap Flights, 400+ Airlines | Amadeus for Developers
+- [Amadeus API](https://developers.amadeus.com/)
 
-- [Airport api](https://www.flightsfrom.com/)
+- [Airport API](https://www.flightsfrom.com/)
 
 ### 5.1.1 Weather API
 
@@ -601,11 +628,11 @@ The progress of the project and task distribution will be tracked using [Github 
 
 # 8. Use of AI in Project Design and Implementation
 
-AI was utilized in brainstorming and finding potential APIs. It was also used to create the foundation of the documentation.
+AI was utilized in brainstorming and finding potential APIs. It was also used to create the foundation of the documentation and for generating and refining text.
 
-In development AI was used to generate DTO classes based on the response json from API call.
+Ai was used in development to generated pieces of code, DTO classes based on the response json from API call, tests, for bug fixing and as a general help.
 
 # 9. Self-evaluation
 
-Project was planned to be implemented in four different parts that will be integrated together as show in general architecture overview. Front-end and services that handle the external api calls. At this point we have not started the integration yet. It seems that splitting the project to four parts has so far been a good choice and we have been able to stick to the plan. Splitting the project to four independent parts correspond to quality because every part is developed, tested and maintained separately.
+The project was planned to be implemented in four different parts that would be integrated together as shown in the general architecture overview: the front-end and services that handle the external API calls. Splitting the project into four parts has proven to be a good choice, allowing us to stick to the plan effectively. Each part was developed, tested, and maintained separately, which contributed to the overall quality of the project. This modular approach ensured that each component was well-tested before integration, leading to a smooth and efficient development process.
 
