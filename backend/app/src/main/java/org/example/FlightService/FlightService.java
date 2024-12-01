@@ -8,6 +8,7 @@ import com.amadeus.resources.FlightOfferSearch.Itinerary;
 import com.amadeus.resources.FlightOfferSearch.SearchSegment;
 
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.List;
 
 public class FlightService {
@@ -15,6 +16,11 @@ public class FlightService {
 
     public FlightService() {
         this.amadeus =  AmadeusClient.getAmadeus();
+    }
+
+    // Package-private setter for testing purposes
+    public void setAmadeus(Amadeus amadeus) {
+        this.amadeus = amadeus;
     }
 
     public List<FlightDTO> searchFlights(String origin, String destination, String departureDate, String returnDate, int adults) {
@@ -53,7 +59,10 @@ public class FlightService {
 
                 flightDTOs.add(dto);
             }
+
+            flightDTOs.sort(Comparator.comparing(FlightDTO::getTotalPrice));
             return flightDTOs;
+            
         } catch (ResponseException e) {
             e.printStackTrace();
             return new ArrayList<>();
