@@ -18,11 +18,6 @@ public class FlightService {
         this.amadeus =  AmadeusClient.getAmadeus();
     }
 
-    // Package-private setter for testing purposes
-    public void setAmadeus(Amadeus amadeus) {
-        this.amadeus = amadeus;
-    }
-
     public List<FlightDTO> searchFlights(String origin, String destination, String departureDate, String returnDate, int adults) {
         try {
             FlightOfferSearch[] flightOffers = amadeus.shopping.flightOffersSearch.get(
@@ -30,7 +25,7 @@ public class FlightService {
                       .and("destinationLocationCode", destination)
                       .and("departureDate", departureDate)
                       .and("returnDate", returnDate)
-                      .and("adults", 1)
+                      .and("adults", adults)
             );
 
             List<FlightDTO> flightDTOs = new ArrayList<>();
@@ -50,7 +45,7 @@ public class FlightService {
                         dto.setCarrierCode(segment.getCarrierCode());
                         dto.setAircraft(segment.getAircraft().getCode());
                         if (segment.getCo2Emissions() != null){
-                            totalCo2Emissions =+ segment.getCo2Emissions()[0].getWeight();
+                            totalCo2Emissions += segment.getCo2Emissions()[0].getWeight();
                         }
                     }
                     dto.setDuration(itinerary.getDuration());
@@ -62,7 +57,7 @@ public class FlightService {
 
             flightDTOs.sort(Comparator.comparing(FlightDTO::getTotalPrice));
             return flightDTOs;
-            
+
         } catch (ResponseException e) {
             e.printStackTrace();
             return new ArrayList<>();
