@@ -15,7 +15,7 @@
   <Loading />
 {:then { data: flights }}
   <div class="flex h-full w-full">
-    <div class="flex flex-1 flex-col items-stretch justify-start">
+    <div class="flex max-h-[100vh] flex-1 flex-col items-stretch justify-start gap-8 overflow-y-auto p-4">
       {#each flights as flight}
         <Flight selected={flight.airport.iata === selectedFlight} onClick={(d) => (selectedFlight = d)} {...flight} />
       {/each}
@@ -25,6 +25,7 @@
         style="https://basemaps.cartocdn.com/gl/positron-gl-style/style.json"
         class="relative h-full w-full"
         pitch={30}
+        zoom={2}
         standardControls
       >
         {#snippet children({ map })}

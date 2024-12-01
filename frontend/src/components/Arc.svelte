@@ -37,8 +37,8 @@
   data={[props.arc]}
   getSourcePosition={(d: Props['arc']) => d.source}
   getTargetPosition={(d: Props['arc']) => d.target}
-  getSourceColor={() => [255, 0, 0]}
-  getTargetColor={() => [0, 255, 0]}
+  getSourceColor={() => [29, 0, 51]}
+  getTargetColor={() => [29, 0, 51]}
   autoHighlight={true}
   highlightColor={[30, 255, 30]}
   getWidth={5}
