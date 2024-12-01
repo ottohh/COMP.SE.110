@@ -4,6 +4,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 import com.google.gson.Gson;
+import com.google.gson.JsonArray;
+import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 
@@ -19,7 +21,7 @@ public class AirportJsonParser {
 
         AirportResponse airportResponse = this.gson.fromJson(response, AirportResponse.class);
 
-        return airportResponse.getAirports();
+        return airportResponse.getAirportsWhichHaveRoutes();
     }
 
     public List<AirportDTO> parseRoutesResponse(String jsonResponse) {
@@ -30,11 +32,18 @@ public class AirportJsonParser {
 
         // Get routes object from response
         if (response.has("routes")) {
-            JsonObject routes = response.getAsJsonObject("routes");
+            JsonElement routesElement = response.get("routes");
+
+            // If routes element is an array, there is no route data
+            if (routesElement.isJsonArray()) {
+                return airports;
+            }
+
+            JsonObject routesObject = routesElement.getAsJsonObject();
 
             // Loop through each route entry
-            for (String key : routes.keySet()) {
-                JsonObject routeObj = routes.getAsJsonObject(key);
+            for (String key : routesObject.keySet()) {
+                JsonObject routeObj = routesObject.getAsJsonObject(key);
                 JsonObject airportObj = routeObj.getAsJsonObject("airport");
 
                 // Parse the airport object and add it to the list
