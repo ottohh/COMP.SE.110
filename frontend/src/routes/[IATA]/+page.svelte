@@ -2,6 +2,7 @@
   import { MapLibre } from 'svelte-maplibre'
   import Arc from '../../components/Arc.svelte'
   import Flight from '../../components/Flight.svelte'
+  import Loading from '../../components/Loading.svelte'
 
   const { data } = $props()
 
@@ -11,7 +12,7 @@
 </script>
 
 {#await data.flights}
-  <div>Loading flights...</div>
+  <Loading />
 {:then { data: flights }}
   <div class="flex h-full w-full">
     <div class="flex flex-1 flex-col items-stretch justify-start">
