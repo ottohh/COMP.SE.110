@@ -60,6 +60,7 @@ public class MainController {
                 var flights= flightService.searchFlights(originIATA, airport.getIATA(), today.format(formatter), returnDate.format(formatter), 1);
                 
                 data.price=Float.toString(flights.get(0).getTotalPrice());
+                data.flight=flights.get(0); //Get first FlightDTO object from list
             } catch (Exception e) {
                 e.printStackTrace();
             } 
@@ -95,6 +96,7 @@ public class MainController {
     private class Data{
         //public FlightOfferSearch flight;
         public String price;
+        public FlightDTO flight;
         public ForecastDTO weather;
         public AirportDTO airport;
     }
