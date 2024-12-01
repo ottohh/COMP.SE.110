@@ -10,10 +10,10 @@
   - [2.2 Non-Functional Requirements](#22-non-functional-requirements)
 - [3. Architecture Design](#3-architecture-design)
   - [3.1 General Architecture Overview](#31-general-architecture-overview)
-    - [3.1.1 Airport service layer class diagram](#311-airport-service-layer-class-diagram)
   - [3.2 Technologies and Tools](#32-technologies-and-tools)
   - [3.3 Backend desing](#33-backend-desing)
     - [3.3.1 WeatherService](#331-weatherservice)
+    - [3.3.2 Airport service layer class diagram](#332-airport-service-layer-class-diagram)
 - [4. User Interface Design](#4-user-interface-design)
   - [4.1 Use Cases](#41-use-cases)
     - [Use Case 1: Search for Flights](#use-case-1-search-for-flights)
@@ -31,6 +31,7 @@
 - [7. Project Management and Timeline](#7-project-management-and-timeline)
   - [7.1 Project Management Tools](#71-project-management-tools)
 - [8. Use of AI in Project Design and Implementation](#8-use-of-ai-in-project-design-and-implementation)
+- [9. Self-evaluation](#9-self-evaluation)
 
 # 1. Introduction
 
@@ -61,7 +62,7 @@ Short-term goals include enabling the program to offer reasonable options.
 
 ## 2.1 Functional Requirements
 
-- **Selecting search criteria**: The user must be able to select the travel budget, departure date, return date, and airport.
+- **Selecting search criteria**: The user must be able to select the travel budget, departure date, and airport.
 
 - **Data visualization**: The user should be able to view map-based visualizations of destinations, weather, and prices.
 
@@ -77,15 +78,19 @@ The application will be implemented as a web application following the MVC princ
 
 ```mermaid
 classDiagram
-    class View {
-        +
+    class Frontend {
+        -Home : User can select search parameters to get flights
+        -Results : User can see results of the search
     }
 
-    class Controller {
+    class MainController {
         -airportService: AirportService
-        -weatherService: WeatherService
         -flightService: FlightService
-        +handleUserRequest(airportCode: String, day: Integer) : void
+        +getFlights(originIATA: String, page: int) : Response
+    }
+
+    class AirportController {
+        -airportService : AirportService
         +getAirportData() : List~AirportDTO~
         +getRouteData(airportCode: String, day: Integer) : List~AirportDTO~
     }
@@ -99,24 +104,53 @@ classDiagram
 
     class WeatherService {
         -apiClient : ApiClient
-        +fetchWeatherData() : WeatherDTO
+        -latitude : string
+        -longitude : string
+        +loadForecasts : boolean
+        +getForecastForDate(date: LocalDate) : ForecastDTO
     }
 
     class FlightService {
-        -apiClient : ApiClient
-        +fetchFlights() : FlightDTO
+        -amadeus : Amadeus
+        +searchFlights(origin: String, destination: String, departureDate: String, returnDate: String, adults: int) : FlightDTO
     }
 
-    Controller --> View : "renders data"
-    View --> Controller : "sends user input"
-    Controller --> WeatherService : "calls"
-    Controller --> AirportService : "calls"
-    Controller --> FlightService : "calls"
+    MainController --> Frontend : "renders data"
+    Frontend --> MainController : "sends request"
+    AirportController --> Frontend  : "sends airports"
+    MainController --> WeatherService : "uses"
+    MainController --> AirportService : "uses"
+    MainController --> FlightService : "uses"
 ```
 
-[Class Diagram](https://drive.google.com/file/d/1OiQVkGx7B5HnSlQVauICjwz9y3TbM1ZT/preview)
+## 3.2 Technologies and Tools
 
-### 3.1.1 Airport service layer class diagram
+- **Frontend**: HTML/CSS/JS
+
+- **Backend**: Java with Maven, Spring Boot
+
+## 3.3 Backend desing
+
+The backend is divided into three services, with a single controller that integrates them.
+
+### 3.3.1 WeatherService
+
+The WeatherService is designed to manage connection to openweathermap API and query forecast's based on location coordinates.
+It consist the respose and DTO classes whom represent the data received from API.
+
+- Constructor that takes the latitude and longitude.
+  This choice was made because api returns forecast's based on location so every location should have their own instance of the class.
+- LoadForeCasts() tries to access the forecast api and load the forecasts for the next five days. Return value tells did the request succeed.
+  This choice comes because we don't want to throw error on GetForecastForDate() in case connection is not made. We would like to see it beforehand and just skip the forecast loading in that case. It is also possible that we would like to get forecast for multiple days on given location. It would not make sense to call the API many times for the data we already have queried.
+- GetForecastForDate(LocalDate date) takes a date wanted to get the forecast for and returns ForecastDTO containing information about weather for that day.
+  In case there is no forecast for the day given as parameter this does return the current days forecast. SHOULD NOT BE CALLED IF LoadForeCast does not succeed.
+  Need for this function is quite obvious from previous functions.
+
+WEATHER_API_URL string is also exposed for testing purpose.
+
+Internally WeatherService uses okhttp3 and gson to retrieve and deserialize data.
+
+### 3.3.2 Airport service layer class diagram
 
 ```mermaid
 classDiagram
@@ -163,32 +197,6 @@ classDiagram
     AirportJsonParser --> AirportDTO : "uses"
     AirportService --> ApiException : "throws error"
 ```
-
-## 3.2 Technologies and Tools
-
-- **Frontend**: HTML/CSS/JS
-
-- **Backend**: Java with Maven, Spring Boot
-
-## 3.3 Backend desing
-  The backend is divided into three services, with a single controller that integrates them.
-
-### 3.3.1 WeatherService
-  The WeatherService is designed to manage connection to openweathermap API and query forecast's based on location coordinates.
-  It consist the respose and DTO classes whom represent the data received from API.
-  - Constructor that takes the latitude and longitude. 
-    This choice was made because api returns forecast's based on location so every location should have their own instance of the class.
-  - LoadForeCasts() tries to access the forecast api and load the forecasts for the next five days. Return value tells did the request succeed.
-    This choice comes because we don't want to throw error on GetForecastForDate() in case connection is not made. We would like to see it beforehand and just skip the forecast loading in that case. It is also possible that we would like to get forecast for multiple days on given location. It would not make sense to call the API many times for the data we already have queried.
-  - GetForecastForDate(LocalDate date) takes a date wanted to get the forecast for and returns ForecastDTO containing information about weather for that day.
-    In case there is no forecast for the day given as parameter this does return the current days forecast. SHOULD NOT BE CALLED IF LoadForeCast does not succeed.
-    Need for this function is quite obvious from previous functions.
-    
-  WEATHER_API_URL string is also exposed for testing purpose.
-
-  Internally WeatherService uses okhttp3 and gson to retrieve and deserialize data.
-
-
 
 # 4. User Interface Design
 
@@ -332,23 +340,26 @@ Example result:
       .
   ]
 }
-  
+
 ```
+
 ### 5.1.2 Amadeus API
 
-Amadeus API is used to fetch flight departure, arrival and price data. 
+Amadeus API is used to fetch flight departure, arrival and price data.
 
 **Fetching Flight Offers**
 
 Flight offers are fetched using the Flight Offers Search API endpoint. The request includes parameters such as the origin and destination airport codes, departure date, and the number of passengers. The API returns a list of available flights with detailed information about each flight.
 
-**Request  Parameters**
-- ```originLocationCode```: The IATA code of the departure airport
-- ```destinationLocationCode```: The IATA code of the destination airport.
-- ```departureDate```: The departure date in YYYY-MM-DD format.
-- ```adults```: The number of adult passengers.
+**Request Parameters**
+
+- `originLocationCode`: The IATA code of the departure airport
+- `destinationLocationCode`: The IATA code of the destination airport.
+- `departureDate`: The departure date in YYYY-MM-DD format.
+- `adults`: The number of adult passengers.
 
 Example result:
+
 ```json
 {
   "meta": {
@@ -488,7 +499,6 @@ Example result:
 }
 ```
 
-
 ### 5.1.3 Airport API
 
 Airport API is used to fetch two types of data:
@@ -544,8 +554,6 @@ Example result:
         "iata_from": "TMP",
         "iata_to": "RIX",
         "city_name_en": "Riga",
-        // TODO are these weekdays which contain flights needed?
-        // In this example there is flights
         "day1": "yes",
         "day2": "yes",
         "day3": "yes",
@@ -553,7 +561,6 @@ Example result:
         "day5": "yes",
         "day6": "yes",
         "day7": "upcoming",
-        // Not sure what price this indicates, maybe just don't use this ?
         "price": "42",
         "airport": {
           "IATA": "RIX",
@@ -594,15 +601,11 @@ The progress of the project and task distribution will be tracked using [Github 
 
 # 8. Use of AI in Project Design and Implementation
 
-AI was utilized in brainstorming and finding potential APIs. It was also used to create the foundation of the documentation. 
+AI was utilized in brainstorming and finding potential APIs. It was also used to create the foundation of the documentation.
 
 In development AI was used to generate DTO classes based on the response json from API call.
 
 # 9. Self-evaluation
+
 Project was planned to be implemented in four different parts that will be integrated together as show in general architecture overview. Front-end and services that handle the external api calls. At this point we have not started the integration yet. It seems that splitting the project to four parts has so far been a good choice and we have been able to stick to the plan. Splitting the project to four independent parts correspond to quality because every part is developed, tested and maintained separately.
-
-
-
-
-
 
