@@ -21,7 +21,7 @@ public class AirportJsonParser {
 
         AirportResponse airportResponse = this.gson.fromJson(response, AirportResponse.class);
 
-        return airportResponse.getAirports();
+        return airportResponse.getAirportsWhichHaveRoutes();
     }
 
     public List<AirportDTO> parseRoutesResponse(String jsonResponse) {
