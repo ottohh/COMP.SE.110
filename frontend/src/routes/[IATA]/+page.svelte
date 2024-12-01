@@ -85,15 +85,27 @@
         standardControls
       >
         {#snippet children({ map })}
-          {#if data.from && selectedFlight}
-            {@const from = data.from}
+          {#if selectedFlight}
             {@const to = flights.find((f) => f.airport.iata === selectedFlight)}
             {@const arc = {
-              source: [from.longitude, from.latitude],
+              source: [data.from.longitude, data.from.latitude],
               target: [to?.airport.longitude || 0, to?.airport.latitude || 0]
             }}
             <Arc
-              {arc}
+              arc={[arc]}
+              onUpdate={(bbox) => {
+                console.log('bbox', bbox)
+                map.fitBounds(bbox, { padding: 100 })
+              }}
+            />
+          {:else}
+            <Arc
+              arc={flights
+                .filter((f) => f.flight)
+                .map((f) => ({
+                  source: [data.from.longitude, data.from.latitude],
+                  target: [f.airport.longitude, f.airport.latitude]
+                }))}
               onUpdate={(bbox) => {
                 console.log('bbox', bbox)
                 map.fitBounds(bbox, { padding: 100 })

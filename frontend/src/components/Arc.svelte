@@ -6,21 +6,18 @@
     arc: {
       source: [number, number] | number[]
       target: [number, number] | number[]
-    }
+    }[]
     onUpdate: (bbox: [[number, number], [number, number]]) => void
   }
 
   let props: Props = $props()
 
   $effect(() => {
-    const source = props.arc.source as [number, number]
-    const target = props.arc.target as [number, number]
-
     // Calculate southwest and northeast corners
-    const minLng = Math.min(source[0], target[0])
-    const minLat = Math.min(source[1], target[1])
-    const maxLng = Math.max(source[0], target[0])
-    const maxLat = Math.max(source[1], target[1])
+    const minLat = Math.min(...props.arc.map((d) => Math.min(d.source[1], d.target[1])))
+    const maxLat = Math.max(...props.arc.map((d) => Math.max(d.source[1], d.target[1])))
+    const minLng = Math.min(...props.arc.map((d) => Math.min(d.source[0], d.target[0])))
+    const maxLng = Math.max(...props.arc.map((d) => Math.max(d.source[0], d.target[0])))
 
     // Construct proper bbox
     const bbox: [[number, number], [number, number]] = [
@@ -34,9 +31,9 @@
 
 <DeckGlLayer
   type={ArcLayer}
-  data={[props.arc]}
-  getSourcePosition={(d: Props['arc']) => d.source}
-  getTargetPosition={(d: Props['arc']) => d.target}
+  data={props.arc}
+  getSourcePosition={(d: Props['arc'][number]) => d.source}
+  getTargetPosition={(d: Props['arc'][number]) => d.target}
   getSourceColor={() => [29, 0, 51]}
   getTargetColor={() => [29, 0, 51]}
   autoHighlight={true}

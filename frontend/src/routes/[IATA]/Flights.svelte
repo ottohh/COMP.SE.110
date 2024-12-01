@@ -59,6 +59,10 @@
 {/if}
 {#each sortedFlights as flight (flight.airport.iata)}
   <div animate:flip={{ easing: cubicOut, delay: 50 }}>
-    <Flight selected={flight.airport.iata === selectedFlight} onClick={(d) => (selectedFlight = d)} {...flight} />
+    <Flight
+      selected={flight.airport.iata === selectedFlight}
+      onClick={(d) => (selectedFlight = selectedFlight === d ? null : d)}
+      {...flight}
+    />
   </div>
 {/each}
